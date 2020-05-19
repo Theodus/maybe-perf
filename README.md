@@ -11,10 +11,10 @@ class iso BenchMaybe is MicroBenchmark
 class iso BenchIter is MicroBenchmark
   fun name(): String => "Iter"
 
-  fun apply() ? =>
+  fun apply() =>
     let x: (U64 | None) = @rand[I32]().u64()
     DoNotOptimise[U64](
-      Iter[U64].maybe(x).map[U64]({(n) => n * 2 }).next()?)
+      Iter[U64].maybe(x).map[U64]({(n) => n * 2 }).get_or(0))
     DoNotOptimise.observe()
 ```
 
@@ -60,7 +60,7 @@ define fastcc nonnull %112* @BenchMaybe_ref_apply_o(%168* nocapture readnone der
 ```
 
 ```llvm
-define fastcc nonnull %112* @BenchIter_ref_apply_o(%152* nocapture readnone dereferenceable(8)) unnamed_addr !pony.abi !2 {
+define fastcc nonnull %112* @BenchIter_ref_apply_o(%152* nocapture readnone dereferenceable(8)) unnamed_addr personality i32 (...)* @ponyint_personality_v0 !pony.abi !2 {
   %2 = tail call i32 (...) @rand()
   %3 = sext i32 %2 to i64
   %4 = shl nsw i64 %3, 1

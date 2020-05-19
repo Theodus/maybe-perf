@@ -21,10 +21,10 @@ class iso BenchMaybe is MicroBenchmark
 class iso BenchIter is MicroBenchmark
   fun name(): String => "Iter"
 
-  fun apply() ? =>
+  fun apply() =>
     let x: (U64 | None) = @rand[I32]().u64()
     DoNotOptimise[U64](
-      Iter[U64].maybe(x).map[U64]({(n) => n * 2 }).next()?)
+      Iter[U64].maybe(x).map[U64]({(n) => n * 2 }).get_or(0))
     DoNotOptimise.observe()
 
 class Iter[A] is Iterator[A]
@@ -46,6 +46,13 @@ class Iter[A] is Iterator[A]
 
   fun ref next(): A ? =>
     _iter.next()?
+
+  fun ref get_or(default: A): A =>
+    if _iter.has_next() then
+      try _iter.next()? else default end
+    else
+      default
+    end
 
   fun ref map[B](f: {(A!): B ?} box): Iter[B]^ =>
     Iter[B](
