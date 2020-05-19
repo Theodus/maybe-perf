@@ -78,6 +78,6 @@ Benchmark results will have their mean and median adjusted for overhead.
 You may disable this with --noadjust.
 
 Benchmark                                   mean            median   deviation  iterations
-Maybe                                      54 ns             54 ns      ±1.53%     2000000
-Iter                                       55 ns             54 ns      ±2.46%     2000000
+Maybe                                      54 ns             54 ns      ±3.99%     1000000
+Iter                                       55 ns             53 ns      ±4.91%     2000000
 ```
